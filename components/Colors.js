@@ -1,0 +1,18 @@
+export default {
+    LipstickPink: '#C48793',
+    DuskyPink: '#CC7A8B',
+    PinkBrown: '#C48189',
+    OldRose: '#C08081',
+    DustyPink: '#D58A94',
+    PinkDaisy: '#E799A3',
+    Rose: '#E8ADAA',
+    DustyRose: '#C9A9A6',
+    Blush:'#FFE6E8',
+    Grey:'grey',
+    ButtonGreen: '#7ACCBC.',
+    MainButton: '#f7287b',
+    ButtonBlue: '#1d91c0',
+    CardBg:'#f6f9cd',
+    ShadowBg:'#004529',
+    Title:'#8BCC7A',
+  }
