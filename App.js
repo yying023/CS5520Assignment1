@@ -12,12 +12,16 @@ export default function App(){
   const [showModal, setShowModal] = useState(false);
   const makeModalVisible = () => { setShowModal(true) }
   const makeModalInvisible = () => { setShowModal(false) }
-  const [showStartingScreen, setShowStartingScreen] = useState(true);
   const [startGame, setStartGame] = useState(false);
   const [userData, setUserData] = useState({});
 
+  const updateUserData = (newUserData) => {
+    setUserData(newUserData);
+  };
+
   // 切换到 Confirm Screen
   const showConfirmScreen = () => {
+    console.log("showConfirmScreen called");
     makeModalVisible();
   };
 
@@ -28,46 +32,12 @@ export default function App(){
     setShowModal(false); // 确保在切换到Game Screen时关闭模态框
   };
 
-  const gameContinueHandler = () => {
-    setStartGame(true);
-    makeModalInvisible();
-  }
-
-  const startScreenHandler = (userData) => {
-    makeModalVisible()
-    setUserData(userData)
-  }
-
   const handleLogout = () => {
     // 在这里处理退出游戏的逻辑
     setStartGame(false); // 将startGame状态重置为false
     setUserData({}); // 清空用户信息
     setCurrentScreen('starting'); // 返回到StartingScreen界面
   };
-
-
-  
-
-
-  // let content = <StartingScreen onStartScreen={startScreenHandler}/>
-  // if (showModal) {
-  //   console.log("here99")
-  //   content = <ConfirmScreen modal={showModal} userData={userData}
-  //   onClose={() => {
-  //     makeModalInvisible(); // 关闭模态框
-  //   }}
-  //   onContinue={() => {{gameContinueHandler}
-  //     // setShowStartingScreen(false);
-  //     // setShowModal(false); // 关闭模态框
-  //     // // setCurrentScreen('game');
-  //   }}/>
-  //   console.log("here999")
-  //   console.log(userData)
-  // }
-  // if (startGame) {
-  //   content = <GameScreen />
-  //   console.log("game screen showed")
-  // }
 
 
   return (
@@ -83,12 +53,14 @@ export default function App(){
             // 处理继续游戏的操作
             showGameScreen(); // 启动游戏
           }}
+          setUserData={setUserData} 
         />
       ) : startGame ? (
         <GameScreen onLogout={handleLogout} /> 
       ) : (
         <StartingScreen
           onStartScreen={(userData) => {
+            console.log("Received userData in StartingScreen:", userData);
             setUserData(userData);
             showConfirmScreen(); // 切换到 Confirm Screen
           }}
@@ -107,44 +79,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-
-
-
-
-
-
-//   return (
-//     <View style={styles.container}>
-//       {/* <StartingScreen /> */}
-//       {content}
-//       {/* {currentScreen === 'starting' && (
-//         <StartingScreen
-//           onConfirm={showConfirmScreen} // 回调函数用于切换到 Confirm Screen
-//         />
-//       )}
-//       {currentScreen === 'confirm' && (
-//         <ConfirmScreen
-//           onGame={showGameScreen} // 回调函数用于切换到 Game Screen
-//           setCurrentScreen={setCurrentScreen}
-//         />
-//       )}
-//       {currentScreen === 'game' && (
-//         <GameScreen />
-//       )} */}
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
 
 

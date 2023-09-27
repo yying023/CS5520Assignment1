@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Image } from 'react-native';
+import Card from '../components/Card';
 
 // GameScreen component
 function GameScreen({ onLogout }) {
@@ -7,6 +8,8 @@ function GameScreen({ onLogout }) {
   const [userGuess, setUserGuess] = useState('');
   const [attempts, setAttempts] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [showSadImage, setShowSadImage] = useState(false);
+  const [guessCorrect, setGuessCorrect] = useState(false);
 
   // generate random number function
   function generateRandomNumber() {
@@ -24,10 +27,20 @@ function GameScreen({ onLogout }) {
 
     if (guess === randomNumber) {
       setIsGameOver(true);
+      setShowSadImage(false);
+      setGuessCorrect(true)
     } else {
-      setAttempts(attempts + 1);
+      setAttempts(prevAttempts => prevAttempts + 1);
+      setShowSadImage(true);
+      setIsGameOver(false);
+      setGuessCorrect(false);
     }
   }
+
+  const handleTryAgain = () => {
+    setUserGuess(''); 
+    setShowSadImage(false); 
+  };
 
   // restart the game
   function restartGame() {
@@ -35,6 +48,8 @@ function GameScreen({ onLogout }) {
     setUserGuess('');
     setAttempts(0);
     setIsGameOver(false);
+    setShowSadImage(false); 
+    setGuessCorrect(false); 
   }
 
   return (
@@ -42,29 +57,38 @@ function GameScreen({ onLogout }) {
         <View style={styles.logoutButtonContainer}>
             <Button title = "Logout" onPress={onLogout}/>
         </View>
-      {isGameOver ? (
-        <View style={styles.card}>
-          <Text>Congratulations! You guessed the number.</Text>
-          <Text>Number of attempts: {attempts}</Text>
-          <Image
-            source={{ uri: `https://picsum.photos/id/${randomNumber}/100/100` }}
+      
+      {showSadImage ? (
+        <Card>
+             <Text>Sorry, your guess is incorrect. Please Try again!</Text>
+            <Image
+            source={require('../assets/smileySadFace.png')}
             style={styles.image}
-          />
-          <Button title="New Game" onPress={restartGame} />
-        </View>
-      ) : (
-        <View style={styles.card}>
-          <Text>Guess a number between 10 and 20:</Text>
-          <TextInput
+            />
+            <Button title="Try Again" onPress={handleTryAgain} />
+        </Card>
+        ) : guessCorrect ? (
+        <Card>
+            <Text>Congratulations! You guessed the number. You guessed it in {attempts} attempts.</Text>
+            <Image
+            source={{ uri: `https://picsum.photos/id/${userGuess}/100/100` }}
+            style={styles.image}
+            />
+            <Button title="New Game" onPress={restartGame} />
+        </Card>
+        ) : (
+        <Card>
+            <Text>Guess a number between 10 and 20:</Text>
+            <TextInput
             style={styles.input}
             onChangeText={text => setUserGuess(text)}
             value={userGuess}
             keyboardType="numeric"
-          />
-          <Button title="Reset" onPress={handleReset} />
-          <Button title="Confirm" onPress={handleGuess} />
-        </View>
-      )}
+            />
+            <Button title="Reset" onPress={handleReset} />
+            <Button title="Confirm" onPress={handleGuess} />
+        </Card>
+        )}
     </View>
   );
 }
@@ -75,19 +99,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  card: {
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.2)',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 4,
-    shadowOpacity: 1,
-    elevation: 3,
-  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -96,12 +107,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   image: {
+    alignSelf: 'center',
     width: 100,
     height: 100,
+    resizeMode: 'contain',
   },
   logoutButtonContainer: {
     position: 'absolute',
-    top: 20, 
+    top: 40, 
     right: 20, 
   },
 });

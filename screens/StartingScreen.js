@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import ConfirmScreen from './ConfirmScreen';
+import Card from '../components/Card';
 import Header from '../components/Header';
 
 
@@ -23,6 +24,7 @@ export default function StartingScreen(props) {
     email: '',
     phone: '',
   });
+
 
   const validateInputs = () => {
     let isValid = true;
@@ -52,9 +54,12 @@ export default function StartingScreen(props) {
     if (!/^\d{10}$/.test(phone)) {
       setErrorPhone('Invalid phone number');
       isValid = false;
-      console.log("invalid phone here");
+      console.log("invalid phone herehahahaha");
+      console.log('error phone is', {errorPhone});
     } else {
       setErrorPhone('');
+      console.log("phone is correct");
+
     }
     console.log('error phone is', {errorPhone});
 
@@ -68,7 +73,7 @@ export default function StartingScreen(props) {
 
     if (isValid && isChecked === true){
       setShowModal(true);
-    }else {
+    } else {
       setShowModal(false); // 不显示模态框
     }
 
@@ -99,7 +104,7 @@ export default function StartingScreen(props) {
   return (
       <View style={styles.container}>
         <Header title="Welcome"></Header>
-        <View style={styles.card}>
+        <Card>
           <Text>Name:</Text>
           <TextInput
             style={styles.input}
@@ -141,23 +146,7 @@ export default function StartingScreen(props) {
             onPress={validateInputs}
             disabled={!isChecked}
           />
-        </View>
-          {/* {showModal && (
-            <ConfirmScreen
-            isVisible={showModal}
-            userData={userData}
-            onClose={() => {
-              setShowModal(false); // 关闭模态框
-            }}
-            onContinue={() => {
-              // 处理继续游戏的操作
-              // 可以在这里添加你需要的逻辑
-              setShowStartingScreen(false);
-              setShowModal(false); // 关闭模态框
-              // setCurrentScreen('game');
-            }}
-          /> 
-          )} */}
+        </Card>
       </View>
   
   );
@@ -169,19 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  card: {
-    padding: 80,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.2)',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 4,
-    shadowOpacity: 1,
-    elevation: 3,
-  },
+  
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
