@@ -3,6 +3,8 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import Card from '../components/Card';
 import Header from '../components/Header';
+import ConfirmScreen from './ConfirmScreen'; 
+import GameScreen from './GameScreen'; 
 
 
 export default function StartingScreen(props) {
@@ -14,15 +16,26 @@ export default function StartingScreen(props) {
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPhone, setErrorPhone] = useState('');
   const [showModal, setShowModal] = useState(false);
-  // const [startButtonDisabled, setStartButtonDisabled] = useState(true);
-  const [showStartingScreen, setShowStartingScreen] = useState(true);
-
+  const makeModalVisible = () => { setShowModal(true) }
+  const [startGame, setStartGame] = useState(false);
 
   const [userData, setUserData] = useState({
     name: '',
     email: '',
     phone: '',
   });
+
+
+  // Switch to Game Screen
+  const showGameScreen = () => {
+    setStartGame(true);
+    setShowModal(false); 
+  };
+
+  const handleLogout = () => {
+    setStartGame(false); 
+    resetInputs();
+  };
 
 
   const validateInputs = () => {
@@ -33,34 +46,26 @@ export default function StartingScreen(props) {
     if (name.length < 2 || hasNumber.test(name)) {
       setErrorName('Invalid name');
       isValid = false;
-      console.log("invalid name here");
     } else {
       setErrorName('');
     }
-    console.log('error name is', {errorName});
 
     // Validate email
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setErrorEmail('Invalid email');
       isValid = false;
-      console.log("invalid email here");
     } else {
       setErrorEmail('');
     }
-    console.log('error email is', {errorEmail});
 
     // Validate phone number
     if (!/^\d{10}$/.test(phone)) {
       setErrorPhone('Invalid phone number');
       isValid = false;
-      console.log("invalid phone herehahahaha");
-      console.log('error phone is', {errorPhone});
     } else {
       setErrorPhone('');
-      console.log("phone is correct");
 
     }
-    console.log('error phone is', {errorPhone});
 
     if (name !== '' && email !== '' && phone !== '' && isChecked === true) {
       setUserData({
@@ -78,7 +83,7 @@ export default function StartingScreen(props) {
         phone,
       });
     } else {
-      setShowModal(false); // 不显示模态框
+      setShowModal(false); 
     }
 };
 
@@ -98,58 +103,75 @@ export default function StartingScreen(props) {
     setIsChecked(value);
   };
 
-  return (
-      <View style={styles.container}>
-        <Header title="Welcome"></Header>
-        <Card>
-          <Text>Name:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={text => setName(text)}
-            value={name}
-          />
-          {errorName ? <Text style={styles.errorText}>{errorName}</Text> : null}
-
-          <Text>Email:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={text => setEmail(text)}
-            value={email}
-          />
-          {errorEmail ? <Text style={styles.errorText}>{errorEmail}</Text> : null}
-
-          <Text>Phone:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={text => setPhone(text)}
-            value={phone}
-          />
-          {errorPhone ? <Text style={styles.errorText}>{errorPhone}</Text> : null}
-          <View>
-            <Checkbox
-              value={isChecked}
-              onValueChange={handleCheckboxChange}
+  if (showModal) {
+    return (
+      <ConfirmScreen
+          isVisible={showModal}
+          userData={userData}
+          onClose={() => {
+            setShowModal(false); 
+          }}
+          onContinue={() => {
+            showGameScreen(); 
+          }}
+          setUserData={userData} 
+        />
+    );
+  } else if (startGame) {
+    return <GameScreen onLogout={handleLogout} /> 
+  } else {
+    return (
+        <View style={styles.container}>
+          <Header title="Welcome"></Header>
+          <Card>
+            <Text>Name:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={text => setName(text)}
+              value={name}
             />
-            <Text>I am not a rebot</Text>
-          </View>
+            {errorName ? <Text style={styles.errorText}>{errorName}</Text> : null}
 
-          {/* <Buttons buttonLeft='Reset' buttonRight = 'Start' onPressLeft={resetInputs} onPressRight={validateInputs}> disabled={!isChecked}</Buttons> */}
+            <Text>Email:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={text => setEmail(text)}
+              value={email}
+            />
+            {errorEmail ? <Text style={styles.errorText}>{errorEmail}</Text> : null}
+
+            <Text>Phone:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={text => setPhone(text)}
+              value={phone}
+            />
+            {errorPhone ? <Text style={styles.errorText}>{errorPhone}</Text> : null}
+            <View>
+              <Checkbox
+                value={isChecked}
+                onValueChange={handleCheckboxChange}
+              />
+              <Text>I am not a rebot</Text>
+            </View>
+
+            {/* <Buttons buttonLeft='Reset' buttonRight = 'Start' onPressLeft={resetInputs} onPressRight={validateInputs}> disabled={!isChecked}</Buttons> */}
 
 
-          <Button
-            title="Reset"
-            onPress={resetInputs}
-          />
+            <Button
+              title="Reset"
+              onPress={resetInputs}
+            />
 
-          <Button
-            title="Start"
-            onPress={validateInputs}
-            disabled={!isChecked}
-          />
-        </Card>
-      </View>
-  
-  );
+            <Button
+              title="Start"
+              onPress={validateInputs}
+              disabled={!isChecked}
+            />
+          </Card>
+        </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

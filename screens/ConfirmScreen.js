@@ -7,9 +7,8 @@ import Colors from '../components/Colors';
 
 export default function ConfirmScreen({ isVisible, userData, onClose, onContinue, setUserData }) {
   if (!isVisible) {
-    return null; // 如果不可见，则不渲染任何内容
+    return null; 
   }
-
 
   return (
     <Modal visible={isVisible} animationType="slide">
@@ -38,15 +37,14 @@ export default function ConfirmScreen({ isVisible, userData, onClose, onContinue
                 <Button
                 title="Go Back"
                 onPress={() => {
-                    // setUserData(userData)
-                    onClose(); // 关闭模态框
+                    onClose(); 
                 }}
                 />
 
                 <Button
                 title="Continue"
                 onPress={() => {
-                    onContinue(); // 处理继续游戏的操作
+                    onContinue(); 
                     onClose();
                 }}
                 />
