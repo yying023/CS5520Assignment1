@@ -25,12 +25,12 @@ function GameScreen({ onLogout }) {
   // handle user guess
   function handleGuess() {
     const guess = parseInt(userGuess);
-
+    setAttempts(prevAttempts => prevAttempts + 1);
     if (guess === randomNumber) {
       setShowSadImage(false);
       setGuessCorrect(true)
     } else {
-      setAttempts(prevAttempts => prevAttempts + 1);
+    //   setAttempts(prevAttempts => prevAttempts + 1);
     //   setAttempts(attempts+1);
       setShowSadImage(true);
       setGuessCorrect(false);
@@ -68,7 +68,7 @@ function GameScreen({ onLogout }) {
         </Card>
         ) : guessCorrect ? (
         <Card>
-            <Text>Congratulations! You guessed the number. You guessed it in {attempts+1} attempts.</Text>
+            <Text>Congratulations! You guessed the number. You guessed it in {attempts} attempts.</Text>
             <Image
             source={{ uri: `https://picsum.photos/id/${userGuess}/100/100` }}
             style={styles.image}
