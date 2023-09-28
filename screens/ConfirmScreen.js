@@ -1,37 +1,55 @@
 import React from 'react';
 import { View, Text, Button, Modal, StyleSheet } from 'react-native';
+import Card from '../components/Card';
+import Buttons from '../components/Buttons';
+import { LinearGradient } from 'expo-linear-gradient';
+import Colors from '../components/Colors';
 
-export default function ConfirmScreen({ isVisible, userData, onClose, onContinue, onGame }) {
+export default function ConfirmScreen({ isVisible, userData, onClose, onContinue, setUserData }) {
   if (!isVisible) {
-    return null; // 如果不可见，则不渲染任何内容
+    return null; 
   }
 
   return (
     <Modal visible={isVisible} animationType="slide">
+        <LinearGradient
+        colors={[
+          Colors.Top,
+          Colors.Bottom,
+         ]}
+        style={styles.background}
+      />
         <View style={styles.container}>
-            <View style={styles.card}>
+            <Card>
                 <Text>Hello {userData.name}!</Text>
                 <Text>Please confirm the following information is correct by pressing the continue button.</Text>
-                <Text>Name: {userData.name}</Text>
-                <Text>Email: {userData.email}</Text>
-                <Text>Phone: {userData.phone}</Text>
+                <View>
+                    <Text style={styles.userInfo}>Name: {userData.name}</Text>
+                    <Text style={styles.userInfo}>Email: {userData.email}</Text>
+                    <Text style={styles.userInfo}>Phone: {userData.phone}</Text>
+                </View>
+                
+                {/* <Buttons buttonLeft='Go Back' buttonRight = 'Confirm' onPressLeft={onClose()} onPressRight={() => {
+                    onContinue(); // 处理继续游戏的操作
+                    onClose();
+                }}></Buttons> */}
 
                 <Button
                 title="Go Back"
                 onPress={() => {
-                    onClose(); // 关闭模态框
+                    onClose(); 
                 }}
                 />
 
                 <Button
                 title="Continue"
                 onPress={() => {
-                    onContinue(); // 处理继续游戏的操作
+                    onContinue(); 
                     onClose();
                 }}
                 />
-            </View>
-        </View>
+            </Card>
+        </View> 
     </Modal>
   );
 }
@@ -42,17 +60,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  card: {
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.2)',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 4,
-    shadowOpacity: 1,
-    elevation: 3,
+  userInfo: {
+    color: 'darkred',
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: 900,
   },
 });

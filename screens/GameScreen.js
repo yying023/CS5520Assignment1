@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, Button, Image, } from 'react-native';
+import Card from '../components/Card';
+import Buttons from '../components/Buttons';
+import Header from '../components/Header';
+import Colors from '../components/Colors';
 
 // GameScreen component
 function GameScreen({ onLogout }) {
   const [randomNumber, setRandomNumber] = useState(generateRandomNumber());
   const [userGuess, setUserGuess] = useState('');
   const [attempts, setAttempts] = useState(0);
-  const [isGameOver, setIsGameOver] = useState(false);
+  const [showSadImage, setShowSadImage] = useState(false);
+  const [guessCorrect, setGuessCorrect] = useState(false);
 
   // generate random number function
   function generateRandomNumber() {
@@ -17,54 +22,72 @@ function GameScreen({ onLogout }) {
     setUserGuess('');
   }
 
-
   // handle user guess
   function handleGuess() {
     const guess = parseInt(userGuess);
-
+    setAttempts(prevAttempts => prevAttempts + 1);
     if (guess === randomNumber) {
-      setIsGameOver(true);
+      setShowSadImage(false);
+      setGuessCorrect(true)
     } else {
-      setAttempts(attempts + 1);
+    //   setAttempts(prevAttempts => prevAttempts + 1);
+    //   setAttempts(attempts+1);
+      setShowSadImage(true);
+      setGuessCorrect(false);
     }
   }
+
+  const handleTryAgain = () => {
+    setUserGuess(''); 
+    setShowSadImage(false); 
+  };
 
   // restart the game
   function restartGame() {
     setRandomNumber(generateRandomNumber());
     setUserGuess('');
     setAttempts(0);
-    setIsGameOver(false);
+    setShowSadImage(false); 
+    setGuessCorrect(false); 
   }
 
   return (
     <View style={styles.container}>
         <View style={styles.logoutButtonContainer}>
-            <Button title = "Logout" onPress={onLogout}/>
+            <Button title = "Logout" onPress={onLogout} color={Colors.ButtonGold}/>
         </View>
-      {isGameOver ? (
-        <View style={styles.card}>
-          <Text>Congratulations! You guessed the number.</Text>
-          <Text>Number of attempts: {attempts}</Text>
-          <Image
-            source={{ uri: `https://picsum.photos/id/${randomNumber}/100/100` }}
+      
+      {showSadImage ? (
+        <Card>
+             <Text>Sorry, your guess is incorrect. Please Try again!</Text>
+            <Image
+            source={require('../assets/smileySadFace.png')}
             style={styles.image}
-          />
-          <Button title="New Game" onPress={restartGame} />
-        </View>
-      ) : (
-        <View style={styles.card}>
-          <Text>Guess a number between 10 and 20:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={text => setUserGuess(text)}
-            value={userGuess}
-            keyboardType="numeric"
-          />
-          <Button title="Reset" onPress={handleReset} />
-          <Button title="Confirm" onPress={handleGuess} />
-        </View>
-      )}
+            />
+            <Button title="Try Again" onPress={handleTryAgain} />
+        </Card>
+        ) : guessCorrect ? (
+        <Card>
+            <Text>Congratulations! You guessed the number. You guessed it in {attempts} attempts.</Text>
+            <Image
+            source={{ uri: `https://picsum.photos/id/${userGuess}/100/100` }}
+            style={styles.image}
+            />
+            <Button title="New Game" onPress={restartGame} />
+        </Card>
+        ) : (
+        <>
+        <Header title="Guess a number between 10 and 20:"></Header>
+        <Card>
+            <TextInput
+                style={styles.input}
+                onChangeText={text => setUserGuess(text)}
+                value={userGuess}
+                keyboardType="numeric" />
+            <Buttons buttonLeft='Reset' buttonRight='Confirm' onPressLeft={handleReset} onPressRight={handleGuess}></Buttons>
+        </Card>
+        </>
+        )}
     </View>
   );
 }
@@ -75,18 +98,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  card: {
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.2)',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 4,
-    shadowOpacity: 1,
-    elevation: 3,
+  header:{
+    color: 'purple',
+    padding: 5,
+    marginBottom: 10,
+    fontSize:20,
   },
   input: {
     borderWidth: 1,
@@ -96,13 +112,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   image: {
+    alignSelf: 'center',
     width: 100,
     height: 100,
+    resizeMode: 'contain',
   },
   logoutButtonContainer: {
     position: 'absolute',
-    top: 20, 
-    right: 20, 
+    top: 40, 
+    right: 120, 
   },
 });
 
