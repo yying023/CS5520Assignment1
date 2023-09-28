@@ -78,7 +78,7 @@ function GameScreen({ onLogout }) {
         </Card>
         ) : guessCorrect ? (
         <Card>
-            <Text>Congratulations! You guessed the number. You guessed it in {attempts} attempts.</Text>
+            <Text>Congratulations! You guessed the number. You guessed it in {attempts+1} attempts.</Text>
             <Image
             source={{ uri: `https://picsum.photos/id/${userGuess}/100/100` }}
             style={styles.image}
