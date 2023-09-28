@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import Checkbox from 'expo-checkbox';
-import ConfirmScreen from './ConfirmScreen';
 import Card from '../components/Card';
 import Header from '../components/Header';
 
@@ -73,16 +72,14 @@ export default function StartingScreen(props) {
 
     if (isValid && isChecked === true){
       setShowModal(true);
+      props.onStartScreen({
+        name,
+        email,
+        phone,
+      });
     } else {
       setShowModal(false); // 不显示模态框
     }
-
-    props.onStartScreen({
-      name,
-      email,
-      phone,
-    });
-    console.log(123)
 };
 
   const resetInputs = () => {
@@ -135,6 +132,9 @@ export default function StartingScreen(props) {
             />
             <Text>I am not a rebot</Text>
           </View>
+
+          {/* <Buttons buttonLeft='Reset' buttonRight = 'Start' onPressLeft={resetInputs} onPressRight={validateInputs}> disabled={!isChecked}</Buttons> */}
+
 
           <Button
             title="Reset"

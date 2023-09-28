@@ -1,10 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import React from 'react';
 import StartingScreen from './screens/StartingScreen';
 import ConfirmScreen from './screens/ConfirmScreen';
 import GameScreen from './screens/GameScreen';
 import { useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import Colors from './components/Colors';
 
 
 export default function App(){
@@ -15,19 +17,14 @@ export default function App(){
   const [startGame, setStartGame] = useState(false);
   const [userData, setUserData] = useState({});
 
-  const updateUserData = (newUserData) => {
-    setUserData(newUserData);
-  };
 
   // 切换到 Confirm Screen
   const showConfirmScreen = () => {
-    console.log("showConfirmScreen called");
     makeModalVisible();
   };
 
   // 切换到 Game Screen
   const showGameScreen = () => {
-    console.log("showGameScreen called");
     setStartGame(true);
     setShowModal(false); // 确保在切换到Game Screen时关闭模态框
   };
@@ -41,7 +38,14 @@ export default function App(){
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={[
+          Colors.Top,
+          Colors.Bottom,
+         ]}
+        style={styles.background}
+      />
       {showModal ? (
         <ConfirmScreen
           isVisible={showModal}
@@ -53,21 +57,20 @@ export default function App(){
             // 处理继续游戏的操作
             showGameScreen(); // 启动游戏
           }}
-          setUserData={setUserData} 
+          setUserData={userData} 
         />
       ) : startGame ? (
         <GameScreen onLogout={handleLogout} /> 
       ) : (
         <StartingScreen
           onStartScreen={(userData) => {
-            console.log("Received userData in StartingScreen:", userData);
             setUserData(userData);
             showConfirmScreen(); // 切换到 Confirm Screen
           }}
         />
       )}
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -77,6 +80,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: 900,
   },
 });
 

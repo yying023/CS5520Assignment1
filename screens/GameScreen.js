@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, Button, Image, } from 'react-native';
 import Card from '../components/Card';
+import Buttons from '../components/Buttons';
+import Header from '../components/Header';
+import Colors from '../components/Colors';
 
 // GameScreen component
 function GameScreen({ onLogout }) {
@@ -20,6 +23,11 @@ function GameScreen({ onLogout }) {
     setUserGuess('');
   }
 
+//   useEffect(() => {
+//     if (userGuess !== '' && userGuess !== randomNumber) {
+//       setAttempts(prevAttempts => prevAttempts + 1);
+//     }
+//   }, [userGuess, randomNumber]);
 
   // handle user guess
   function handleGuess() {
@@ -31,6 +39,7 @@ function GameScreen({ onLogout }) {
       setGuessCorrect(true)
     } else {
       setAttempts(prevAttempts => prevAttempts + 1);
+    //   setAttempts(attempts+1);
       setShowSadImage(true);
       setIsGameOver(false);
       setGuessCorrect(false);
@@ -55,7 +64,7 @@ function GameScreen({ onLogout }) {
   return (
     <View style={styles.container}>
         <View style={styles.logoutButtonContainer}>
-            <Button title = "Logout" onPress={onLogout}/>
+            <Button title = "Logout" onPress={onLogout} color={Colors.ButtonGold}/>
         </View>
       
       {showSadImage ? (
@@ -77,17 +86,17 @@ function GameScreen({ onLogout }) {
             <Button title="New Game" onPress={restartGame} />
         </Card>
         ) : (
+        <>
+        <Header title="Guess a number between 10 and 20:"></Header>
         <Card>
-            <Text>Guess a number between 10 and 20:</Text>
             <TextInput
-            style={styles.input}
-            onChangeText={text => setUserGuess(text)}
-            value={userGuess}
-            keyboardType="numeric"
-            />
-            <Button title="Reset" onPress={handleReset} />
-            <Button title="Confirm" onPress={handleGuess} />
+                style={styles.input}
+                onChangeText={text => setUserGuess(text)}
+                value={userGuess}
+                keyboardType="numeric" />
+            <Buttons buttonLeft='Reset' buttonRight='Confirm' onPressLeft={handleReset} onPressRight={handleGuess}></Buttons>
         </Card>
+        </>
         )}
     </View>
   );
@@ -98,6 +107,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  header:{
+    color: 'purple',
+    padding: 5,
+    marginBottom: 10,
+    fontSize:20,
   },
   input: {
     borderWidth: 1,
@@ -115,7 +130,7 @@ const styles = StyleSheet.create({
   logoutButtonContainer: {
     position: 'absolute',
     top: 40, 
-    right: 20, 
+    right: 120, 
   },
 });
 
