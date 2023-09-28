@@ -10,7 +10,6 @@ function GameScreen({ onLogout }) {
   const [randomNumber, setRandomNumber] = useState(generateRandomNumber());
   const [userGuess, setUserGuess] = useState('');
   const [attempts, setAttempts] = useState(0);
-  const [isGameOver, setIsGameOver] = useState(false);
   const [showSadImage, setShowSadImage] = useState(false);
   const [guessCorrect, setGuessCorrect] = useState(false);
 
@@ -23,25 +22,17 @@ function GameScreen({ onLogout }) {
     setUserGuess('');
   }
 
-//   useEffect(() => {
-//     if (userGuess !== '' && userGuess !== randomNumber) {
-//       setAttempts(prevAttempts => prevAttempts + 1);
-//     }
-//   }, [userGuess, randomNumber]);
-
   // handle user guess
   function handleGuess() {
     const guess = parseInt(userGuess);
 
     if (guess === randomNumber) {
-      setIsGameOver(true);
       setShowSadImage(false);
       setGuessCorrect(true)
     } else {
       setAttempts(prevAttempts => prevAttempts + 1);
     //   setAttempts(attempts+1);
       setShowSadImage(true);
-      setIsGameOver(false);
       setGuessCorrect(false);
     }
   }
@@ -56,7 +47,6 @@ function GameScreen({ onLogout }) {
     setRandomNumber(generateRandomNumber());
     setUserGuess('');
     setAttempts(0);
-    setIsGameOver(false);
     setShowSadImage(false); 
     setGuessCorrect(false); 
   }

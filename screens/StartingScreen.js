@@ -16,7 +16,6 @@ export default function StartingScreen(props) {
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPhone, setErrorPhone] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const makeModalVisible = () => { setShowModal(true) }
   const [startGame, setStartGame] = useState(false);
 
   const [userData, setUserData] = useState({
@@ -95,7 +94,6 @@ export default function StartingScreen(props) {
     setErrorName('');
     setErrorEmail('');
     setErrorPhone('');
-    // setStartButtonDisabled(true);
   };
 
 

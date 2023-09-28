@@ -10,7 +10,6 @@ import Colors from './components/Colors';
 export default function App(){
   const [showModal, setShowModal] = useState(false);
   const makeModalVisible = () => { setShowModal(true) }
-  const makeModalInvisible = () => { setShowModal(false) }
   const [userData, setUserData] = useState({});
 
   // Switch to Confirm Screen
